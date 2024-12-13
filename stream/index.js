@@ -4,9 +4,11 @@ const fs = require("fs");
 const port = 3030;
 
 app.get('/', (req, res) => {
-    fs.readFile("./sample.txt", (err, data) => {
-        res.end(data);
+    const stream = fs.createReadStream('./sample.txt', 'utf-8');
+    stream.on('data', (chunk) => {
+        res.write(chunk)
     });
+    stream.on('end', () => res.end())
 });
 
 app.listen(port, () => {
